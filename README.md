@@ -107,6 +107,7 @@ bigmart-sales-prediction/
 ├── KNN Regression.ipynb
 ├── KNN_reg_outlet_sales.csv
 ├── bigmart_knn_model.pkl
+├──requirements.txt
 ├── README.md
 │
 ├── templates/
