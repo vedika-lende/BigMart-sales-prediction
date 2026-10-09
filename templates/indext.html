@@ -1,0 +1,715 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BigMart AI | Sales Predictor</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Your CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+    <!-- ================= HEADER ================= -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+
+            <div>
+                <h2>BigMart <span>AI</span></h2>
+                <p>Sales Intelligence</p>
+            </div>
+        </div>
+
+        <div class="model-status">
+            <span class="status-dot"></span>
+            <span>KNN Model Active</span>
+        </div>
+
+    </header>
+
+
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                Machine Learning Powered
+            </div>
+
+            <h1>
+                Predict Your
+                <span>Outlet Sales</span>
+            </h1>
+
+            <p>
+                Enter product and outlet information to get an
+                AI-powered estimate of expected sales.
+            </p>
+
+        </div>
+
+        <div class="hero-graphic">
+            <div class="circle circle-one"></div>
+            <div class="circle circle-two"></div>
+
+            <div class="chart-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-grid">
+
+
+        <!-- ================= FORM CARD ================= -->
+        <section class="prediction-card">
+
+            <div class="card-heading">
+
+                <div>
+                    <h2>
+                        <i class="fa-solid fa-sliders"></i>
+                        Prediction Details
+                    </h2>
+
+                    <p>
+                        Provide the following information
+                    </p>
+                </div>
+
+                <div class="step-badge">
+                    10 Inputs
+                </div>
+
+            </div>
+
+
+            <form action="/predict" method="POST" id="predictionForm">
+
+
+                <!-- ========== ITEM INFORMATION ========== -->
+                <div class="section-title">
+
+                    <div class="section-icon">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+
+                    <div>
+                        <h3>Item Information</h3>
+                        <p>Enter details about the product</p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Item Weight -->
+                    <div class="input-group">
+
+                        <label for="item_weight">
+                            Item Weight
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-weight-hanging"></i>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                id="item_weight"
+                                name="item_weight"
+                                placeholder="e.g. 12.5"
+                                required>
+
+                        </div>
+
+                        <small>Weight of the product</small>
+
+                    </div>
+
+
+                    <!-- Fat Content -->
+                    <div class="input-group">
+
+                        <label for="item_fat_content">
+                            Item Fat Content
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-droplet"></i>
+
+                            <select
+                                id="item_fat_content"
+                                name="item_fat_content">
+
+                                <option value="0">Low Fat</option>
+                                <option value="1">Regular</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Visibility -->
+                    <div class="input-group">
+
+                        <label for="item_visibility">
+                            Item Visibility
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                            <input
+                                type="number"
+                                step="0.0001"
+                                id="item_visibility"
+                                name="item_visibility"
+                                placeholder="e.g. 0.05"
+                                required>
+
+                        </div>
+
+                        <small>Visibility percentage</small>
+
+                    </div>
+
+
+                    <!-- MRP -->
+                    <div class="input-group">
+
+                        <label for="item_mrp">
+                            Item MRP
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                id="item_mrp"
+                                name="item_mrp"
+                                placeholder="e.g. 150"
+                                required>
+
+                        </div>
+
+                        <small>Maximum retail price</small>
+
+                    </div>
+
+
+                    <!-- Item Type -->
+                    <div class="input-group full-width">
+
+                        <label for="item_type">
+                            Item Type
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-tags"></i>
+
+                            <select
+                                id="item_type"
+                                name="item_type">
+
+                                <option value="Breads">Breads</option>
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Canned">Canned</option>
+                                <option value="Dairy">Dairy</option>
+                                <option value="Frozen Foods">Frozen Foods</option>
+                                <option value="Fruits and Vegetables">
+                                    Fruits and Vegetables
+                                </option>
+                                <option value="Hard Drinks">Hard Drinks</option>
+                                <option value="Health and Hygiene">
+                                    Health and Hygiene
+                                </option>
+                                <option value="Household">Household</option>
+                                <option value="Meat">Meat</option>
+                                <option value="Others">Others</option>
+                                <option value="Seafood">Seafood</option>
+                                <option value="Snack Foods">Snack Foods</option>
+                                <option value="Soft Drinks">Soft Drinks</option>
+                                <option value="Starchy Foods">
+                                    Starchy Foods
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ========== OUTLET INFORMATION ========== -->
+                <div class="section-title outlet-section">
+
+                    <div class="section-icon outlet-icon">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+
+                    <div>
+                        <h3>Outlet Information</h3>
+                        <p>Enter details about the store</p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Outlet Identifier -->
+                    <div class="input-group">
+
+                        <label for="outlet_identifier">
+                            Outlet Identifier
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <select
+                                id="outlet_identifier"
+                                name="outlet_identifier">
+
+                                <option value="OUT013">OUT013</option>
+                                <option value="OUT017">OUT017</option>
+                                <option value="OUT018">OUT018</option>
+                                <option value="OUT019">OUT019</option>
+                                <option value="OUT027">OUT027</option>
+                                <option value="OUT035">OUT035</option>
+                                <option value="OUT045">OUT045</option>
+                                <option value="OUT046">OUT046</option>
+                                <option value="OUT049">OUT049</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Outlet Size -->
+                    <div class="input-group">
+
+                        <label for="outlet_size">
+                            Outlet Size
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-ruler-combined"></i>
+
+                            <select
+                                id="outlet_size"
+                                name="outlet_size">
+
+                                <option value="0">Small</option>
+                                <option value="1">Medium</option>
+                                <option value="2">High</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Location -->
+                    <div class="input-group">
+
+                        <label for="outlet_location_type">
+                            Outlet Location
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-map-location-dot"></i>
+
+                            <select
+                                id="outlet_location_type"
+                                name="outlet_location_type">
+
+                                <option value="0">Tier 1</option>
+                                <option value="1">Tier 2</option>
+                                <option value="2">Tier 3</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Outlet Type -->
+                    <div class="input-group">
+
+                        <label for="outlet_type">
+                            Outlet Type
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-shop"></i>
+
+                            <select
+                                id="outlet_type"
+                                name="outlet_type">
+
+                                <option value="Grocery Store">
+                                    Grocery Store
+                                </option>
+
+                                <option value="Supermarket Type1">
+                                    Supermarket Type1
+                                </option>
+
+                                <option value="Supermarket Type2">
+                                    Supermarket Type2
+                                </option>
+
+                                <option value="Supermarket Type3">
+                                    Supermarket Type3
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Establishment Year -->
+                    <div class="input-group full-width">
+
+                        <label for="outlet_establishment_year">
+                            Outlet Establishment Year
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-calendar-days"></i>
+
+                            <input
+                                type="number"
+                                id="outlet_establishment_year"
+                                name="outlet_establishment_year"
+                                placeholder="e.g. 1999"
+                                min="1900"
+                                max="2026"
+                                required>
+
+                        </div>
+
+                        <small>Year in which the outlet was established</small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ========== PREDICT BUTTON ========== -->
+                <button type="submit" class="predict-btn" id="predictBtn">
+
+                    <span class="btn-content">
+
+                        <i class="fa-solid fa-brain"></i>
+
+                        <span>Predict Outlet Sales</span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </span>
+
+                </button>
+
+
+                <div class="secure-note">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Prediction generated using your trained KNN regression model
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ================= RESULT PANEL ================= -->
+        <aside class="result-panel">
+
+
+            {% if prediction is defined %}
+
+            <!-- RESULT AVAILABLE -->
+
+            <div class="result-card success-result">
+
+                <div class="result-top">
+
+                    <div class="result-icon">
+                        <i class="fa-solid fa-chart-column"></i>
+                    </div>
+
+                    <span class="prediction-status">
+                        Prediction Ready
+                    </span>
+
+                </div>
+
+
+                <div class="result-label">
+                    Estimated Outlet Sales
+                </div>
+
+
+                <div class="prediction-value">
+                    <span>₹</span>
+                    <strong id="predictionNumber">
+                        {{ prediction }}
+                    </strong>
+                </div>
+
+
+                <div class="result-description">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Your estimated item outlet sales have been calculated.
+
+                </div>
+
+
+                <div class="result-divider"></div>
+
+
+                <div class="result-info">
+
+                    <div>
+                        <span>Model</span>
+                        <strong>KNN Regression</strong>
+                    </div>
+
+                    <div>
+                        <span>Status</span>
+                        <strong class="active-text">
+                            Active
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {% else %}
+
+            <!-- INITIAL STATE -->
+
+            <div class="result-card empty-result">
+
+                <div class="empty-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <h2>
+                    Your Prediction
+                </h2>
+
+                <p>
+                    Complete the form and click
+                    <strong>Predict Outlet Sales</strong>
+                    to see your estimated sales.
+                </p>
+
+
+                <div class="prediction-steps">
+
+                    <div class="prediction-step">
+
+                        <span>01</span>
+
+                        <div>
+                            <strong>Enter Details</strong>
+                            <small>
+                                Provide item information
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="prediction-step">
+
+                        <span>02</span>
+
+                        <div>
+                            <strong>Select Outlet</strong>
+                            <small>
+                                Choose outlet characteristics
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="prediction-step">
+
+                        <span>03</span>
+
+                        <div>
+                            <strong>Get Prediction</strong>
+                            <small>
+                                View estimated sales
+                            </small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- MODEL INFO -->
+
+            <div class="model-card">
+
+                <div class="model-card-icon">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+
+                <div>
+
+                    <h3>AI Sales Predictor</h3>
+
+                    <p>
+                        Powered by a trained
+                        <strong>K-Nearest Neighbors</strong>
+                        regression model.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+
+        <p>
+            © 2026 BigMart AI Sales Predictor
+        </p>
+
+        <div class="footer-tech">
+
+            <span>
+                <i class="fa-brands fa-python"></i>
+                Python
+            </span>
+
+            <span>
+                <i class="fa-solid fa-flask"></i>
+                Flask
+            </span>
+
+            <span>
+                <i class="fa-solid fa-robot"></i>
+                KNN
+            </span>
+
+        </div>
+
+    </footer>
+
+</div>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+
+    const form = document.getElementById("predictionForm");
+    const button = document.getElementById("predictBtn");
+
+    form.addEventListener("submit", function () {
+
+        button.classList.add("loading");
+
+        button.querySelector(".btn-content").innerHTML = `
+            <span class="loader"></span>
+            <span>Analyzing Data...</span>
+        `;
+
+    });
+
+
+    // Smooth scroll to result after prediction
+    const result = document.querySelector(".success-result");
+
+    if (result) {
+
+        setTimeout(() => {
+
+            result.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+        }, 300);
+
+    }
+
+</script>
+
+</body>
+</html>
+
