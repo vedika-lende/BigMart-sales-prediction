@@ -116,15 +116,6 @@ bigmart-sales-prediction/
     └── style.css
 ```
 
-### File Description
-
-* `app.py` — Flask application and prediction logic.
-* `bigmart_knn_model.pkl` — Saved KNN regression model and scaler.
-* `requirements.txt` — Python dependencies.
-* `README.md` — Project documentation.
-* `templates/index.html` — Webpage structure and prediction form.
-* `static/style.css` — Styling and responsive layout.
-
 ## 🚀 Installation and Setup
 
 ### 1. Clone the Repository
